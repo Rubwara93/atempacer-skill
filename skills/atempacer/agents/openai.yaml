@@ -1,0 +1,5 @@
+interface:
+  display_name: "Atempacer"
+  short_description: "Breath pacer web app in a company's corporate design, ready for the phone's home screen"
+policy:
+  allow_implicit_invocation: true

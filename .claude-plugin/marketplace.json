@@ -1,0 +1,17 @@
+{
+  "name": "atempacer",
+  "owner": {
+    "name": "Ruben Langwara",
+    "url": "https://www.rubenlangwara.de"
+  },
+  "description": "Atempacer im eigenen Corporate Design – Skill von Ruben Langwara.",
+  "plugins": [
+    {
+      "name": "atempacer",
+      "source": "./",
+      "description": "Atempacer-Web-App im Corporate Design einer Firma, fertig für den Homescreen.",
+      "category": "productivity",
+      "keywords": ["atempacer", "breathing", "resilienz", "coaching", "corporate-design"]
+    }
+  ]
+}

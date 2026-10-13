@@ -1,0 +1,12 @@
+{
+  "company": "Demo GmbH",
+  "visual": "flower",
+  "languages": ["de-du", "en"],
+  "presets": ["calm", "coherence", "box", "478"],
+  "defaultPreset": "calm",
+  "duration": 300,
+
+  "colors": { "primary": "#2f6f8f", "secondary": "#e08a3c", "background": "#fbfaf8", "ink": "#1d232b" },
+  "radius": 10,
+  "output": "dist"
+}

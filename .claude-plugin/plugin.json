@@ -1,0 +1,13 @@
+{
+  "name": "atempacer",
+  "version": "0.1.0",
+  "description": "Builds a breath pacer web app in a company's corporate design: one HTML file plus home screen icon and offline mode. Circle, flower, wave or square; any default rhythm; several languages.",
+  "author": {
+    "name": "Ruben Langwara",
+    "url": "https://www.rubenlangwara.de"
+  },
+  "repository": "https://github.com/Rubwara93/atempacer-skill",
+  "license": "MIT",
+  "keywords": ["atempacer", "breathing", "breath-pacer", "resilienz", "coaching", "corporate-design", "pwa"],
+  "skills": ["./skills/atempacer"]
+}
