@@ -20,7 +20,7 @@ Heraus kommt ein Ordner mit einer einzigen HTML-Datei, in der alles steckt (Schr
 /plugin install atempacer@atempacer
 ```
 
-**Codex CLI**: den Ordner `skills/atempacer` nach `~/.codex/skills/` kopieren.
+**Codex**: am einfachsten im Chat schreiben: „Installiere den Skill von github.com/Rubwara93/atempacer-skill“. Codex kopiert den Ordner `skills/atempacer` dann nach `~/.codex/skills/`. Von Hand geht es so:
 
 ```bash
 git clone https://github.com/Rubwara93/atempacer-skill.git && cp -r atempacer-skill/skills/atempacer ~/.codex/skills/
