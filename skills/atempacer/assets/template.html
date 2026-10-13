@@ -407,15 +407,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
 
   V.circle = {
     init: function () {
+      /* Fläche zuerst, damit Linie und Fortschrittsring darüber sichtbar bleiben */
+      this.disc = el('circle', { cx: 160, cy: 160, r: 70 }, viz);
+      this.inner = el('circle', { cx: 160, cy: 160, r: 50, fill: '#ffffff', 'fill-opacity': 0.12 }, viz);
       el('circle', { cx: 160, cy: 160, r: 154, fill: 'none', stroke: C.line, 'stroke-width': 2, 'stroke-dasharray': '3 6' }, viz);
       this.arc = el('circle', { cx: 160, cy: 160, r: 154, fill: 'none', 'stroke-width': 3, 'stroke-linecap': 'round', transform: 'rotate(-90 160 160)' }, viz);
       this.len = 2 * Math.PI * 154;
       this.arc.setAttribute('stroke-dasharray', this.len);
-      this.disc = el('circle', { cx: 160, cy: 160, r: 70 }, viz);
-      this.inner = el('circle', { cx: 160, cy: 160, r: 50, fill: '#ffffff', 'fill-opacity': 0.12 }, viz);
     },
     draw: function (ph, t, L, col) {
-      var r = 72 + (134 - 72) * L;
+      var r = 72 + (154 - 72) * L;  /* voll eingeatmet = bis zur gestrichelten Linie */
       this.disc.setAttribute('r', r.toFixed(2)); this.disc.setAttribute('fill', col);
       this.inner.setAttribute('r', (r * 0.72).toFixed(2));
       this.arc.setAttribute('stroke', col);
@@ -436,7 +437,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
       this.arc.setAttribute('stroke-dasharray', this.len);
     },
     draw: function (ph, t, L, col) {
-      var dist = 14 + 58 * L, sc = 0.45 + 0.55 * L, rot = -20 + 40 * L;
+      var dist = 14 + 76 * L, sc = 0.45 + 0.55 * L, rot = -20 + 40 * L;  /* Blütenspitzen erreichen die Linie */
       for (var i = 0; i < 8; i++) {
         var a = i * 45 + rot;
         this.petals[i].setAttribute('transform', 'translate(160 160) rotate(' + a.toFixed(2) + ') translate(0 ' + (-dist).toFixed(2) + ') scale(' + sc.toFixed(3) + ')');
