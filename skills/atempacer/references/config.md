@@ -11,6 +11,7 @@ Paths are relative to the config file. Only `company` and `colors.primary` are r
   "titleHighlight": {"de-sie": "Atem", "en": "Breath"},
 
   "visual": "circle",
+  "visuals": "all",
   "languages": ["de-sie", "en"],
   "presets": ["calm", "coherence", "box", "478"],
   "defaultPreset": "calm",
@@ -47,7 +48,8 @@ Paths are relative to the config file. Only `company` and `colors.primary` are r
 | `appName` | Title in the app. String, or object per language (`{"de-sie": "Atempause", "en": "Breathing Space"}`). Default from the language file. |
 | `shortName` | Name under the home screen icon. Keep it ≤ 12 characters. |
 | `titleHighlight` | Part of the title shown in brand colour, string or object per language. Default from the language file ("Atem", "Breath"). `""` = none. |
-| `visual` | `circle` · `flower` · `wave` · `square` |
+| `visual` | `circle` · `flower` · `wave` · `square` – the animation the app starts with; also drawn on the home screen icon. |
+| `visuals` | Optional: list of animations users can switch between on the setup screen (e.g. `["circle", "wave"]`), or `"all"`. With two or more, a "Display" row with small symbols appears; the choice is remembered on the device. Missing = only `visual`, no switch. |
 | `languages` | Order matters: the first is the fallback. The app picks the phone's language if it's in the list, and remembers a manual switch. Bundled: `de-sie`, `de-du`, `en`. Others: `i18n/<code>.json` in the project, all keys of `en.json`. Codes like `fr`, `es`, `nl`, `tr`, `pl`, `it`, `uk`, `ar` (right-to-left is not supported by the layout – say so if asked). |
 | `presets` | Built-in ids: `calm` 4/0/6/0, `coherence` 5/0/5/0, `box` 4/4/4/4, `478` 4/7/8/0, `energize` 4/0/2/0. Custom: `{"id": "slow", "name": {"de-sie": "Langsam", "en": "Slow"}, "in": 5, "h1": 0, "out": 7, "h2": 0}`. Values in seconds, 0.5 steps work. |
 | `defaultPreset` | Id the app starts with on first visit. Default 4/6 = `calm`. |

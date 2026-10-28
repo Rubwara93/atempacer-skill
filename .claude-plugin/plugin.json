@@ -1,6 +1,6 @@
 {
   "name": "atempacer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Builds a breath pacer web app in a company's corporate design: one HTML file plus home screen icon and offline mode. Circle, flower, wave or square; any default rhythm; several languages.",
   "author": {
     "name": "Ruben Langwara",

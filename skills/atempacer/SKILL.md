@@ -54,7 +54,7 @@ Home screen icon – decide like this:
 Ask with your question tool (in Claude Code: `AskUserQuestion`, max. 4 questions per call, recommended option first and marked as such). Without such a tool, ask as a short numbered list. Two rounds:
 
 **Round A**
-1. **Animation** – Circle (recommended, calmest) · Flower (petals open and close) · Wave (dot travels along the breath curve, good for longer exhales) · Square (box breathing; with no holds it becomes a rising and falling line). Use each option's `preview` field, if your tool has one, to describe the motion in one line.
+1. **Animation** – Circle (recommended, calmest) · Flower (petals open and close) · Wave (dot travels along the breath curve, good for longer exhales) · Square (box breathing; with no holds it becomes a rising and falling line). Use each option's `preview` field, if your tool has one, to describe the motion in one line. Then offer to let users switch between animations in the app (`visuals`: the chosen ones or `"all"`); the one picked here stays the start animation and the icon symbol.
 2. **Default rhythm** – 4 s in / 6 s out "Calm" (recommended, the established default) · 5/5 "Coherence" · Box 4-4-4-4 · 4-7-8 · custom (they name seconds for in / hold / out / hold).
 3. **Languages** (multi-select) – German, English, + "other" (they name them). The language switch appears in the app once there are two or more.
 4. **German form of address** (only if German is chosen) – Sie / du. Take it from the brand's own texts if you've seen them and just confirm.

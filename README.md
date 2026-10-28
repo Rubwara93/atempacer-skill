@@ -4,7 +4,7 @@ Ein Skill für Claude Code und Codex, der einen Atempacer im Corporate Design ei
 
 Der Skill fragt nach Logo, Farben und Schrift (oder liest sie von der Website), dann nach den Anpassungen:
 
-- Darstellung: Kreis, Blume, Welle oder Quadrat
+- Darstellung: Kreis, Blume, Welle oder Quadrat – auf Wunsch alle zum Umschalten in der App
 - Standard-Rhythmus: 4 Sekunden ein, 6 aus (voreingestellt), 5/5, Box 4-4-4-4, 4-7-8 oder ein eigener
 - Sprachen: Deutsch mit Sie oder du, Englisch und jede weitere Sprache, die der Agent übersetzt; ab zwei Sprachen gibt es einen Umschalter in der App
 - Übungen, Dauer, App-Name
@@ -82,4 +82,4 @@ Der Atempacer entstand bei der [Resilienz Initiative](https://www.resilienz-init
 
 ## English summary
 
-`atempacer` is an agent skill (Claude Code, Codex and other agents that read `SKILL.md`) that builds a breath pacer web app in a company's corporate design. It asks for logo, colours and fonts, or reads them from the company website, then lets you choose the animation (circle, flower, wave, square), the default rhythm (4 s in / 6 s out unless you pick another), the languages (German formal or informal, English, any other language the agent translates) and a few more settings. The output is a folder with one self-contained HTML file, home screen icons, a web app manifest and a service worker for offline use. No tracking, no external requests. To get the home screen icon on phones, upload the folder to any static host (Netlify Drop, GitHub Pages, your own webspace) and share the link; the skill walks you through it and writes the instructions for your clients. Install with `/plugin marketplace add Rubwara93/atempacer-skill` and `/plugin install atempacer@atempacer`, or copy `skills/atempacer` into `~/.claude/skills/` or `~/.codex/skills/`. MIT licence.
+`atempacer` is an agent skill (Claude Code, Codex and other agents that read `SKILL.md`) that builds a breath pacer web app in a company's corporate design. It asks for logo, colours and fonts, or reads them from the company website, then lets you choose the animation (circle, flower, wave, square – or let users switch between them in the app), the default rhythm (4 s in / 6 s out unless you pick another), the languages (German formal or informal, English, any other language the agent translates) and a few more settings. The output is a folder with one self-contained HTML file, home screen icons, a web app manifest and a service worker for offline use. No tracking, no external requests. To get the home screen icon on phones, upload the folder to any static host (Netlify Drop, GitHub Pages, your own webspace) and share the link; the skill walks you through it and writes the instructions for your clients. Install with `/plugin marketplace add Rubwara93/atempacer-skill` and `/plugin install atempacer@atempacer`, or copy `skills/atempacer` into `~/.claude/skills/` or `~/.codex/skills/`. MIT licence.

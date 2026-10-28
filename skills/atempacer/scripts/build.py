@@ -38,6 +38,7 @@ BUILTIN_PRESETS = {
     "energize":  {"in": 4, "h1": 0, "out": 2, "h2": 0},
 }
 VISUALS = ("circle", "flower", "wave", "square")
+LATE_KEYS = ("view", "visual_circle", "visual_flower", "visual_wave", "visual_square")
 DEFAULT_FONT = {
     "family": "Roboto",
     "fallback": "'Helvetica Neue', Helvetica, Arial, sans-serif",
@@ -106,15 +107,28 @@ def load(cfg_path):
             sys.exit(f"Sprachdatei fehlt / missing language file: i18n/{lang}.json")
     ref = json.loads((ASSETS / "i18n" / "en.json").read_text(encoding="utf-8"))
     for lang, d in i18n.items():
+        # keys added in later skill versions: fall back to English instead of failing on older language files
+        late = [k for k in LATE_KEYS if k not in d]
+        if late:
+            d.update({k: ref[k] for k in late})
+            warnings.append(f"{lang}.json: {', '.join(late)} fehlen, englischer Text eingesetzt / missing, English used – bitte übersetzen / please translate")
         missing = sorted(set(ref) - set(d))
         if missing:
             sys.exit(f"{lang}.json: fehlende Schlüssel / missing keys: {', '.join(missing)}")
         overrides = (cfg.get("texts") or {}).get(lang) or {}
         d.update(overrides)
 
-    visual = cfg.get("visual", "circle")
-    if visual not in VISUALS:
-        sys.exit(f"visual muss eins sein von / must be one of: {', '.join(VISUALS)}")
+    visuals = cfg.get("visuals") or []
+    if visuals == "all":
+        visuals = list(VISUALS)
+    visual = cfg.get("visual") or (visuals[0] if visuals else "circle")
+    if not visuals:
+        visuals = [visual]
+    elif visual not in visuals:
+        visuals = [visual] + visuals
+    for v in visuals:
+        if v not in VISUALS:
+            sys.exit(f"visual muss eins sein von / must be one of: {', '.join(VISUALS)}")
 
     presets = []
     for item in cfg.get("presets") or ["calm", "coherence", "box", "478"]:
@@ -159,10 +173,10 @@ def load(cfg_path):
     for ph in ("inhale", "exhale"):
         fill = colors[ph]
         best = max(contrast("#ffffff", fill), contrast(ink, fill))
-        if visual == "circle" and best < 3:
+        if "circle" in visuals and best < 3:
             warnings.append(f"Kontrast/contrast Phasentext im Kreis / phase text in circle ({ph} {fill}): max {best:.2f}:1 (< 3:1) – dunklere Phasenfarbe wählen / pick a darker colors.{ph}")
 
-    return cfg, base, p, langs, i18n, visual, presets, default, colors
+    return cfg, base, p, langs, i18n, visual, visuals, presets, default, colors
 
 
 # ---------- fonts ----------
@@ -312,7 +326,7 @@ def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     cfg_path = Path(sys.argv[1]).expanduser().resolve()
-    cfg, base, p, langs, i18n, visual, presets, default, colors = load(cfg_path)
+    cfg, base, p, langs, i18n, visual, visuals, presets, default, colors = load(cfg_path)
     out = p(cfg.get("output", "dist"))
     out.mkdir(parents=True, exist_ok=True)
 
@@ -393,6 +407,7 @@ def main():
     js_cfg = {
         "storageKey": cfg.get("storageKey") or "atempacer-" + re.sub(r"[^a-z0-9]+", "-", (company or name0).lower()).strip("-"),
         "visual": visual,
+        "visuals": visuals,
         "presets": presets,
         "defaultPreset": default,
         "duration": int(cfg.get("duration", 300)),
@@ -457,7 +472,7 @@ def main():
 
     size = (out / "index.html").stat().st_size / 1024
     print(f"OK  {out}")
-    print(f"    index.html {size:.0f} KB · {visual} · {', '.join(langs)} · Standard/default {default}")
+    print(f"    index.html {size:.0f} KB · {', '.join(visuals)} · {', '.join(langs)} · Standard/default {default}")
     for w in warnings:
         print("WARN", w)
 

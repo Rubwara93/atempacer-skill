@@ -74,6 +74,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
 .preset[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 .preset[aria-pressed="true"] .m { color: var(--on-primary); opacity: 0.85; }
 
+/* Darstellung */
+.views { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.view {
+  padding: 10px 4px 8px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius);
+  display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 500;
+  transition: background 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+}
+.view svg { width: 28px; height: 28px; display: block; }
+.view[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+
 /* Rhythmus */
 .bar { display: flex; height: 8px; gap: 2px; border-radius: var(--radius-s); overflow: hidden; }
 .bar span { display: block; height: 100%; transition: flex-grow 300ms var(--ease); }
@@ -138,6 +148,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
     </header>
     <h1 class="titel" id="titel"></h1>
     <p class="intro" id="intro"></p>
+
+    <div id="viewsBox" hidden>
+      <div class="row-head" style="margin-bottom:10px"><span class="label" data-t="view"></span></div>
+      <div class="views" id="views"></div>
+    </div>
 
     <div>
       <div class="row-head" style="margin-bottom:10px"><span class="label" data-t="choose"></span></div>
@@ -224,13 +239,14 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
 
   /* ---------- Zustand ---------- */
   var def = CFG.presets.filter(function (p) { return p.id === CFG.defaultPreset; })[0] || CFG.presets[0];
-  var st = { in: def.in, h1: def.h1, out: def.out, h2: def.h2, duration: CFG.duration, presetId: def.id, lang: null };
+  var st = { in: def.in, h1: def.h1, out: def.out, h2: def.h2, duration: CFG.duration, presetId: def.id, lang: null, visual: CFG.visual };
   try {
     var saved = JSON.parse(localStorage.getItem(LS) || '{}');
     if (saved && typeof saved === 'object') {
       PHASES.concat(['duration']).forEach(function (k) { if (typeof saved[k] === 'number' && isFinite(saved[k])) st[k] = saved[k]; });
       if (typeof saved.presetId === 'string' || saved.presetId === null) st.presetId = saved.presetId;
       if (typeof saved.lang === 'string' && I18N[saved.lang]) st.lang = saved.lang;
+      if (CFG.visuals.indexOf(saved.visual) >= 0) st.visual = saved.visual;
     }
   } catch (e) {}
   if (!st.lang) {
@@ -289,11 +305,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
       tEl.appendChild(document.createTextNode(name.slice(0, at))); tEl.appendChild(b);
       tEl.appendChild(document.createTextNode(name.slice(at + hl.length)));
     } else tEl.textContent = name;
-    $('intro').textContent = T('intro_' + CFG.visual);
+    $('intro').textContent = T('intro_' + st.visual);
     document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = T(el.dataset.t); });
     document.querySelectorAll('[data-tl]').forEach(function (el) { el.setAttribute('aria-label', T(el.dataset.tl)); });
     $('session').setAttribute('aria-label', T('sessionLabel'));
-    buildPresets(); buildPhases(); render();
+    buildViews(); buildPresets(); buildPhases(); render();
     pauseBtn.textContent = run && run.paused ? T('resume') : T('pause');
     if (run) draw();
   }
@@ -302,6 +318,30 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
   var presetsEl = $('presets'), phasesEl = $('phases'), barEl = $('bar');
   var MINUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>';
   var PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+
+  var viewsEl = $('views');
+  var VIEW_ICONS = {
+    circle: '<circle cx="14" cy="14" r="12" stroke-dasharray="2 3"/><circle cx="14" cy="14" r="7" fill="currentColor" stroke="none"/>',
+    flower: '<g fill="currentColor" stroke="none" fill-opacity="0.55"><ellipse cx="14" cy="7.5" rx="3.6" ry="6"/><ellipse cx="14" cy="20.5" rx="3.6" ry="6"/><ellipse cx="7.5" cy="14" rx="6" ry="3.6"/><ellipse cx="20.5" cy="14" rx="6" ry="3.6"/></g><circle cx="14" cy="14" r="3" fill="currentColor" stroke="none"/>',
+    wave: '<path d="M2 21 C7 21 8 7 13 7 S19 21 26 21"/><circle cx="13" cy="7" r="3" fill="currentColor" stroke="none"/>',
+    square: '<rect x="5" y="5" width="18" height="18" rx="1"/><circle cx="5" cy="14" r="3" fill="currentColor" stroke="none"/>'
+  };
+  function buildViews() {
+    viewsEl.innerHTML = '';
+    $('viewsBox').hidden = CFG.visuals.length < 2;
+    CFG.visuals.forEach(function (v) {
+      var b = document.createElement('button');
+      b.className = 'view'; b.dataset.v = v;
+      b.setAttribute('aria-pressed', String(v === st.visual));
+      b.innerHTML = '<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">' + VIEW_ICONS[v] + '</svg><span></span>';
+      b.querySelector('span').textContent = T('visual_' + v);
+      b.addEventListener('click', function () {
+        if (st.visual === v) return;
+        st.visual = v; persist(); setVisual(); applyLang();
+      });
+      viewsEl.appendChild(b);
+    });
+  }
 
   function buildPresets() {
     presetsEl.innerHTML = '';
@@ -325,7 +365,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
       var row = document.createElement('div');
       row.className = 'phase-row';
       if (i === 0) row.style.borderTop = '0';
-      var lbl = phaseLabel(k), hint = T(k === 'h1' || k === 'h2' ? 'hint_' + k : 'hint_' + k + '_' + CFG.visual);
+      var lbl = phaseLabel(k), hint = T(k === 'h1' || k === 'h2' ? 'hint_' + k : 'hint_' + k + '_' + st.visual);
       row.innerHTML =
         '<div class="phase-name"><span class="dot"></span><div><div class="t"></div><div class="h"></div></div></div>' +
         '<div class="stepper"><button class="step">' + MINUS + '</button><span class="val" data-k="' + k + '"></span>' +
@@ -535,10 +575,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--secondary); out
     }
   };
 
-  var vis = V[CFG.visual] || V.circle;
-  var readout = document.querySelector('.readout');
-  stageEl.classList.add('viz-' + (V[CFG.visual] ? CFG.visual : 'circle'));
-  vis.init();
+  var vis, readout = document.querySelector('.readout');
+  function setVisual() {
+    var v = V[st.visual] ? st.visual : 'circle';
+    viz.innerHTML = '';
+    readout.style.color = '';
+    stageEl.className = 'stage viz-' + v;
+    vis = V[v];
+    vis.init();
+  }
+  setVisual();
 
   /* ---------- Übung ---------- */
   var phaseLabelEl = $('phaseLabel'), phaseCount = $('phaseCount');
